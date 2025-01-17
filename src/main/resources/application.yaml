@@ -1,0 +1,53 @@
+server:
+  port: 8082
+vaadin:
+  launch-browser: false
+spring:
+  application:
+    name: demo-spring-ai
+  ai:
+    vectorstore:
+      redis:
+        initialize-schema: true
+        index-name: message-history-idx
+        prefix: spring-ai
+        batching-strategy: TOKEN_COUNT
+
+    openai:
+      base-url: https://api.proxyapi.ru/openai
+      api-key: override-me
+      chat:
+        enabled: false
+        options:
+          model: gpt-3.5-turbo
+      embedding:
+        enabled: false
+        options:
+          model: text-embedding-ada-002
+    ollama:
+      chat:
+        enabled: false
+        options:
+          model: llama3.2:1b
+      embedding:
+        enabled: false
+        options:
+          model: llama3.2:1b
+
+logging.level:
+  org.springframework.web.client: DEBUG
+  org.springframework.ai.chat: DEBUG
+
+---
+spring.config.activate.on-profile: openai
+
+spring.ai.openai:
+  chat.enabled: true
+  embedding.enabled: true
+---
+spring.config.activate.on-profile: ollama
+
+spring.ai.ollama:
+  chat.enabled: true
+  embedding.enabled: true
+---
