@@ -27,7 +27,17 @@ public class ChatAdvisorConfig {
     public Advisor questionAnswerAdvisor(VectorStore store) {
         return new QuestionAnswerAdvisor(
                 store,
-                SearchRequest.defaults().withSimilarityThreshold(0.85)
+                SearchRequest.defaults().withSimilarityThreshold(0.75).withTopK(15),
+                """
+                        Context information is below, surrounded by ********
+                        
+                        ********
+                        {question_answer_context}
+                        ********
+                        
+                        Given the context and provided history information and not prior knowledge,
+                        reply to the user comment. If the answer is not in the context or memory inform the user that you can't answer.
+                        """
         );
     }
 

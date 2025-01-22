@@ -13,8 +13,8 @@ public class ChatConfiguration {
     @Bean
     public ChatClient chatClient(ChatClient.Builder builder, List<Advisor> advisors) {
         return builder
-                .defaultSystem("You are a friendly chat bot that answers question in the voice of a Master Yoda")
                 .defaultAdvisors(advisors)
+                .defaultFunctions("CurrentDate")
                 .build();
     }
 }

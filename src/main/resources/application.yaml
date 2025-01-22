@@ -5,12 +5,28 @@ vaadin:
 spring:
   application:
     name: demo-spring-ai
+  docker:
+    compose:
+      lifecycle-management: start_only
+  kafka:
+    producer:
+      bootstrap-servers: localhost:29092
+      retries: 3
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    streams:
+      application-id: demo-spring-ai
+      bootstrap-servers: localhost:29092
+      stateDir: /tmp/kafka-streams/${spring.kafka.streams.application-id}
+      properties:
+        default.key.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
+        default.value.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
   ai:
     vectorstore:
       redis:
         initialize-schema: true
-        index-name: message-history-idx
-        prefix: spring-ai
+        index: default-index
+        prefix: spring-ai-
         batching-strategy: TOKEN_COUNT
 
     openai:
@@ -19,7 +35,7 @@ spring:
       chat:
         enabled: false
         options:
-          model: gpt-3.5-turbo
+          model: gpt-4o-mini
       embedding:
         enabled: false
         options:
@@ -37,6 +53,26 @@ spring:
 logging.level:
   org.springframework.web.client: DEBUG
   org.springframework.ai.chat: DEBUG
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "prometheus,health,info,env,metrics"
+
+app:
+  etl:
+    steps:
+      tokenizer:
+        input: events_raw
+        output: events_tokenized
+      event-metadata-enricher:
+        input: events_tokenized
+        output: events_with_metadata
+        additional:
+          keywords_number: 8
+      event-vector-saver:
+        input: events_with_metadata
 
 ---
 spring.config.activate.on-profile: openai
