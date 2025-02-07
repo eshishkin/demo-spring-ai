@@ -1,0 +1,23 @@
+FROM ubuntu:22.04 as builder
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get -y update && \
+    apt-get -y upgrade && \
+    apt-get -y install make git zlib1g-dev libssl-dev gperf php-cli cmake default-jdk g++
+
+RUN git clone https://github.com/tdlib/td.git
+
+WORKDIR /td/build
+
+RUN git checkout eb98bbe611e1132f98914e4cd4e2c727079cc84d \
+    && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX:PATH=../example/java/td -DTD_ENABLE_JNI=ON .. \
+    && cmake --build . --target install
+
+WORKDIR /td/example/java/build
+RUN mkdir /tdlib \
+    && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX:PATH=/tdlib -DTd_DIR:PATH=/td/example/java/td/lib/cmake/Td .. \
+    && cmake --build . --target install
+
+FROM ubuntu:22.04 as artifact
+COPY --from=builder /tdlib/bin/libtdjni.so /tdlib/libtdjni.so

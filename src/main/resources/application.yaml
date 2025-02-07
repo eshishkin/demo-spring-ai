@@ -21,6 +21,19 @@ spring:
       properties:
         default.key.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
         default.value.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
+  telegram:
+    client:
+      api-id: override-me
+      api-hash: override-me
+      phone: override-me
+      system-language-code: ru
+      database-encryption-key: override-me
+      device-model: desktop
+      use-message-database: true
+      use-file-database: true
+      log-verbosity-level: 3
+      use-test-dc: true
+
   ai:
     vectorstore:
       redis:
@@ -73,7 +86,6 @@ app:
           keywords_number: 8
       event-vector-saver:
         input: events_with_metadata
-
 ---
 spring.config.activate.on-profile: openai
 
