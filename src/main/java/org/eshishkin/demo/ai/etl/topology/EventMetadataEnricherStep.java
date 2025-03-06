@@ -47,7 +47,7 @@ public class EventMetadataEnricherStep extends DefaultMappingIntermediateStep {
         var document = new Document(message.id(), message.data(), message.metadata());
         return enricher.transform(List.of(document))
                 .stream()
-                .map(doc -> new TextMessage(doc.getId(), doc.getContent(), doc.getMetadata()))
+                .map(doc -> new TextMessage(doc.getId(), doc.getText(), doc.getMetadata()))
                 .toList();
     }
 
@@ -107,7 +107,7 @@ public class EventMetadataEnricherStep extends DefaultMappingIntermediateStep {
 
         private Optional<EventMetadata> askModel(Prompt prompt) {
             try {
-                return Optional.ofNullable(converter.convert(llm.call(prompt).getResult().getOutput().getContent()));
+                return Optional.ofNullable(converter.convert(llm.call(prompt).getResult().getOutput().getText()));
             } catch (Exception ex) {
                 log.warn("Unable to parse content to EventMetadata", ex);
                 return Optional.empty();

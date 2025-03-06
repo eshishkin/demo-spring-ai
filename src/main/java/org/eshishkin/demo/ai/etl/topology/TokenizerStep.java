@@ -35,7 +35,7 @@ class TokenizerStep extends DefaultMappingIntermediateStep {
         var document = new Document(message.id(), message.data(), message.metadata());
         return splitter.transform(List.of(document))
                 .stream()
-                .map(doc -> new TextMessage(doc.getId(), doc.getContent(), doc.getMetadata()))
+                .map(doc -> new TextMessage(doc.getId(), doc.getText(), doc.getMetadata()))
                 .toList();
     }
 }

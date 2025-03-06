@@ -27,7 +27,7 @@ public class ChatAdvisorConfig {
     public Advisor questionAnswerAdvisor(VectorStore store) {
         return new QuestionAnswerAdvisor(
                 store,
-                SearchRequest.defaults().withSimilarityThreshold(0.75).withTopK(15),
+                SearchRequest.builder().similarityThreshold(0.75).topK(15).build(),
                 """
                         Context information is below, surrounded by ********
                         

@@ -14,7 +14,7 @@ public class ChatConfiguration {
     public ChatClient chatClient(ChatClient.Builder builder, List<Advisor> advisors) {
         return builder
                 .defaultAdvisors(advisors)
-                .defaultFunctions("CurrentDate")
+                .defaultTools("CurrentDate")
                 .build();
     }
 }

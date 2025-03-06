@@ -29,7 +29,7 @@ public class RagController {
             var future = kafkaTemplate.send(
                     "events_raw",
                     doc.getId(),
-                    new TextMessage(doc.getId(), doc.getContent(), doc.getMetadata())
+                    new TextMessage(doc.getId(), doc.getText(), doc.getMetadata())
             );
 
             future.join();
