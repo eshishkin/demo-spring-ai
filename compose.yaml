@@ -1,9 +1,16 @@
 services:
-  redis:
-    image: 'redis/redis-stack:latest'
+  postgres:
+    image: 'pgvector/pgvector:pg17'
     ports:
-      - '6379'
-      - '8001:8001'
+      - '5432'
+    environment:
+      - 'POSTGRES_DB=demo_spring_ai'
+      - 'POSTGRES_USER=postgres'
+      - 'POSTGRES_PASSWORD=postgres'
+    labels:
+      org.springframework.boot.service-connection: postgres
+    networks:
+      - backend
 
   kafka:
     image: apache/kafka:latest
@@ -20,12 +27,16 @@ services:
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,LISTENER:PLAINTEXT,LISTENER_HOST:PLAINTEXT
       KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
       KAFKA_INTER_BROKER_LISTENER_NAME: LISTENER
+    networks:
+      - backend
 
   init-kafka:
     image: apache/kafka:latest
     depends_on:
       - kafka
     entrypoint: [ '/bin/sh', '-c' ]
+    networks:
+      - backend
     command: |
       "
       cd /opt/kafka/bin
@@ -48,3 +59,17 @@ services:
       echo -e 'Successfully created the following topics:'
       ./kafka-topics.sh --bootstrap-server kafka:9092 --list
       "
+
+  pg-admin:
+    image: dpage/pgadmin4:7.6
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_LISTEN_ADDRESS: 0.0.0.0
+    ports:
+      - "5051:80"
+    networks:
+      - backend
+
+networks:
+  backend:

@@ -21,6 +21,9 @@ spring:
       properties:
         default.key.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
         default.value.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
+  datasource:
+    username: postgres
+    password: postgres
   ai:
     mcp:
       server:
@@ -29,11 +32,9 @@ spring:
         type: SYNC
         sse-message-endpoint: /mcp/messages
     vectorstore:
-      redis:
+      pgvector:
         initialize-schema: true
-        index: default-index
-        prefix: spring-ai-
-        batching-strategy: TOKEN_COUNT
+        schema-name: "demo_spring_ai"
 
     openai:
       base-url: https://api.proxyapi.ru/openai
