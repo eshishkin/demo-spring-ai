@@ -24,6 +24,8 @@ spring:
   datasource:
     username: postgres
     password: postgres
+  liquibase:
+    change-log: classpath:/changelog/changelog.xml
   ai:
     mcp:
       server:
@@ -34,7 +36,6 @@ spring:
     vectorstore:
       pgvector:
         initialize-schema: true
-        schema-name: "demo_spring_ai"
 
     openai:
       base-url: https://api.proxyapi.ru/openai
@@ -56,7 +57,13 @@ spring:
         enabled: false
         options:
           model: llama3.2:1b
-
+jpa:
+  properties:
+    jakarta:
+      persistence:
+        schema-generation:
+          scripts:
+            action:
 logging.level:
   org.springframework.web.client: DEBUG
   org.springframework.ai.chat: DEBUG

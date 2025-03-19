@@ -1,4 +1,4 @@
-package org.eshishkin.demo.ai.chat.functions;
+package org.eshishkin.demo.ai.chat.backend.tools.functions;
 
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.stereotype.Component;

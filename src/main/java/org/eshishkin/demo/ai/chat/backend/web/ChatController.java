@@ -1,4 +1,4 @@
-package org.eshishkin.demo.ai.chat.web;
+package org.eshishkin.demo.ai.chat.backend.web;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.chat.client.ChatClient;

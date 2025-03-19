@@ -1,4 +1,4 @@
-package org.eshishkin.demo.ai.chat.config;
+package org.eshishkin.demo.ai.chat.backend.config;
 
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.api.Advisor;
