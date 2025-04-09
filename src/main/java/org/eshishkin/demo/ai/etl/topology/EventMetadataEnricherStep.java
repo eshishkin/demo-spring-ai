@@ -96,8 +96,12 @@ public class EventMetadataEnricherStep extends DefaultMappingIntermediateStep {
                 askModel(prompt).ifPresent(result -> {
                     document.getMetadata().put("is_event", result.event);
                     document.getMetadata().put("description", result.description);
-                    document.getMetadata().put("event_date", result.date);
-                    document.getMetadata().put("event_place", result.place);
+                    if (result.date != null) {
+                        document.getMetadata().put("event_date", result.date);
+                    }
+                    if (result.place != null) {
+                        document.getMetadata().put("event_place", result.place);
+                    }
                     document.getMetadata().put("keywords", result.keywords);
                 });
             }
